@@ -5,7 +5,6 @@ var defaultDataRange 			      = '2010:2010';
 var msPerDay 				            = 86400000;
 var cacheLengthDays				      = 60; 
 
-
 var CountryRequest = {
   
   makeRequest: function (request,serverResponse,countryCode,cache) {

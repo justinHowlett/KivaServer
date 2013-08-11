@@ -3,14 +3,21 @@ var time = require('time');
 
 function scheduleTasks(cache){
 
-	//go and get all the country info
+	//fetch cachable data on server start
 	fetchAllCountryInfo(cache);
+	fetchNewestLoans(cache);
 	
-	//schedule the country info to be refreshed monthly
 	var cronJob = require('cron').CronJob;
-	var job = new cronJob('00 00 1 * *', function(){ 
-    	//first day of every month
+	
+	var countryDetailsJob = new cronJob('00 00 1 * *', function(){ 
+    	//first day of every month at midnight
     	fetchAllCountryInfo(cache);
+
+  	},null, true,"America/New_York");
+
+  	var kivaNewestLoans = new cronJob('0 0 * * *', function(){ 
+    	//daily at midnight
+    	fetchNewestLoans(cache);
 
   	},null, true,"America/New_York");
 
@@ -35,6 +42,16 @@ function fetchAllCountryInfo(cache){
 
 	}
 
+}
+
+function fetchNewestLoans(cache){
+
+	var kivaFeeds = require('./kivaFeeds.js');
+    var kivaNewestRequest = Object.create(kivaFeeds.NewestRequest);
+    var request = require('request');
+    request.url = '/kiva/newest/';
+
+	kivaNewestRequest.makeRequest(request,null,cache);
 }
 
 exports.scheduleTasks = scheduleTasks;
