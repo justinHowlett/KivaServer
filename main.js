@@ -13,12 +13,14 @@ http.createServer(function (request, serverResponse) {
     	return;
     }
 
-    if (request.url.indexOf('/countries/') != -1){
+    var endPoint = url.parse(request.url, true).pathname;
+
+    if (endPoint == '/countries/'){
       
       var country = require('./countryStats.js');
-
-      var queryData = url.parse(request.url, true).query;
-      country.fetchCountry(request,serverResponse,queryData.countrycode,cache);
+      var queryString = url.parse(request.url, true).query;
+      
+      country.fetchCountry(request,serverResponse,queryString.countrycode,cache);
 
     }else{
       serverResponse.writeHead(404, {'Content-Type': 'application/json'});
