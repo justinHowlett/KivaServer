@@ -1,6 +1,9 @@
 var http  = require('http');
 var cache = require('memory-cache');
 var url   = require('url');
+var tasks = require('./taskScheduler.js');
+
+tasks.scheduleTasks(cache);
 
 http.createServer(function (request, serverResponse) {
 
@@ -8,10 +11,12 @@ http.createServer(function (request, serverResponse) {
 
     var cachedItem = cache.get(request.url);
     if (cachedItem){
+      console.log('returning cached item for url '+request.url);
     	serverResponse.end(cachedItem);
-    	console.log('cache found '+cachedItem);
     	return;
     }
+
+    console.log('missed cached item for url '+request.url);
 
     var endPoint = url.parse(request.url, true).pathname;
 
@@ -20,7 +25,9 @@ http.createServer(function (request, serverResponse) {
       var country = require('./countryStats.js');
       var queryString = url.parse(request.url, true).query;
       
-      country.fetchCountry(request,serverResponse,queryString.countrycode,cache);
+      var countryRequest = Object.create(country.CountryRequest);
+
+      countryRequest.makeRequest(request,serverResponse,queryString.countrycode,cache);
 
     }else{
       serverResponse.writeHead(404, {'Content-Type': 'application/json'});

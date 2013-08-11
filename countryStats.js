@@ -5,29 +5,41 @@ var defaultDataRange 			      = '2010:2010';
 var msPerDay 				            = 86400000;
 var cacheLengthDays				      = 15; 
 
-var fetchCountry = function(request, serverResponse, countryCode, cache) {
-	
-	var completedRequests = 0;
+
+var CountryRequest = {
+  
+  makeRequest: function (request,serverResponse,countryCode,cache) {
+  
+    var completedRequests = 0;
     var concatResponse = [];
-
+    
     for (var i in wbIndicators){
-    	var indicator  = wbIndicators[i];
-    	var requestUrl = worldBankBaseURL+countryCode+worldBankIndicatorsEndpoint+indicator+'?date='+defaultDataRange+'&format=json';
-    	var wbRequest = require('request');
 
-   		wbRequest(requestUrl, function(error, response, body) {
-   			concatResponse.push(body);
-   			completedRequests ++;
-   			if (completedRequests == wbIndicators.length-1){
+      var indicator  = wbIndicators[i];
+      var requestUrl = worldBankBaseURL+countryCode+worldBankIndicatorsEndpoint+indicator+'?date='+defaultDataRange+'&format=json';
+      var tempRequestUrl = request.url; //If we access request.url directly it's always the last one in the array.
 
-   				var jsonResponse = JSON.stringify(concatResponse);
-   				cache.put(request.url, jsonResponse, cacheLengthDays*msPerDay); 
-   				serverResponse.end(jsonResponse);
-   			}
-  			
-  		});
+      var wbRequest = require('request');
+   
+      wbRequest(requestUrl, function(error, response, body) {
+       
+        concatResponse.push(body);
+        completedRequests ++;
+        
+        if (completedRequests == wbIndicators.length-1){
+
+          var jsonResponse = JSON.stringify(concatResponse);
+          cache.put(tempRequestUrl, jsonResponse, cacheLengthDays*msPerDay); 
+
+          if (serverResponse != null){
+              serverResponse.end(jsonResponse);
+          }
+          
+        }
+        
+      });
     }
+  }
 };
 
-
-exports.fetchCountry = fetchCountry;
+exports.CountryRequest = CountryRequest;
