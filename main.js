@@ -24,10 +24,14 @@ http.createServer(function (request, serverResponse) {
       
       var country = require('./countryStats.js');
       var queryString = url.parse(request.url, true).query;
-      
       var countryRequest = Object.create(country.CountryRequest);
-
       countryRequest.makeRequest(request,serverResponse,queryString.countrycode,cache);
+
+    }else if (endPoint == '/kiva/newest/'){
+      
+      var kivaFeeds = require('./kivaFeeds.js');
+      var kivaNewestRequest = Object.create(kivaFeeds.NewestRequest);
+      kivaNewestRequest.makeRequest(request,serverResponse,cache);
 
     }else{
       serverResponse.writeHead(404, {'Content-Type': 'application/json'});

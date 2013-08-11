@@ -3,7 +3,7 @@ var worldBankBaseURL            = 'http://api.worldbank.org/countries/';
 var worldBankIndicatorsEndpoint = '/indicators/';
 var defaultDataRange 			      = '2010:2010';
 var msPerDay 				            = 86400000;
-var cacheLengthDays				      = 15; 
+var cacheLengthDays				      = 60; 
 
 
 var CountryRequest = {
