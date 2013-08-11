@@ -1,21 +1,10 @@
 var http  = require('http');
 var cache = require('memory-cache');
-var url   = 'http://api.worldbank.org/countries/SZ/indicators/SH.DYN.AIDS.ZS?format=json&date=2010:2010';
-var wbIndicators = ['SP.POP.TOTL','SL.UEM.TOTL.ZS','NY.GDP.MKTP.KD.ZG','NY.GDP.PCAP.CD','SE.SEC.ENRR','SE.ADT.1524.LT.ZS','SH.DYN.MORT','EG.ELC.ACCS.ZS','SL.TLF.0714.WK.MA.ZS','SL.TLF.0714.WK.MA.ZS','IS.ROD.PAVE.ZS','SP.DYN.LE00.IN','SH.TBS.INCD','SH.STA.MALN.ZS','SP.DYN.LE00.IN','SH.TBS.INCD','SH.STA.MALN.ZS','SH.DYN.AIDS.ZS','SH.MLR.INCD'];
-var worldBankBaseURL            = 'http://api.worldbank.org/countries/';
-var worldBankIndicatorsEndpoint = '/indicators/';
-var defaultDataRange 			= '2010:2010';
-var msPerDay 					    = 86400000;
-var cacheLengthDays				= 15; 
+var url   = require('url');
 
 http.createServer(function (request, serverResponse) {
 
     serverResponse.writeHead(200, {'Content-Type': 'application/json'});
-
-    if (request.url != '/'){
-    	serverResponse.end(null);
-    	return;
-    }
 
     var cachedItem = cache.get(request.url);
     if (cachedItem){
@@ -23,28 +12,20 @@ http.createServer(function (request, serverResponse) {
     	console.log('cache found '+cachedItem);
     	return;
     }
-    	
-    var completedRequests = 0;
-    var concatResponse = [];
 
-    for (var i in wbIndicators){
-    	var indicator  = wbIndicators[i];
-    	var requestUrl = worldBankBaseURL+'SZ'+worldBankIndicatorsEndpoint+indicator+'?date='+defaultDataRange+'&format=json';
-    	var wbRequest = require('request');
+    if (request.url.indexOf('/countries/') != -1){
+      
+      var country = require('./countryStats.js');
 
-   		wbRequest(requestUrl, function(error, response, body) {
-   			concatResponse.push(body);
-   			completedRequests ++;
-   			if (completedRequests == wbIndicators.length-1){
+      var queryData = url.parse(request.url, true).query;
+      country.fetchCountry(request,serverResponse,queryData.countrycode,cache);
 
-   				var jsonResponse = JSON.stringify(concatResponse);
-   				cache.put(request.url, jsonResponse, cacheLengthDays*msPerDay); 
-   				serverResponse.end(jsonResponse);
-   			}
-  			
-  		});
+    }else{
+      serverResponse.writeHead(404, {'Content-Type': 'application/json'});
+      serverResponse.end();
     }
 
+  
 }).listen(8080);
 
 var kivaString = 'MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM' + '\n' 
