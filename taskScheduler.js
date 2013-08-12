@@ -1,5 +1,4 @@
 var kivaSupportedCountries = ['AF', 'AL', 'AM', 'AZ', 'BA', 'BD', 'BF', 'BG', 'BI', 'BJ', 'BO', 'BW', 'BZ', 'CD', 'CG', 'CI', 'CL', 'CM', 'CO', 'CR', 'DO', 'EC', 'GE', 'GH', 'GT', 'GZ', 'HN', 'HT', 'ID', 'IL', 'IN', 'IQ', 'JO', 'KE', 'KG', 'KH', 'LB', 'LK', 'LR', 'MD', 'ML', 'MN', 'MW', 'MX', 'MZ', 'NA', 'NG', 'NI', 'NP', 'PA', 'PE', 'PH', 'PK', 'PS', 'PY', 'QS', 'RW', 'SL', 'SN', 'SO', 'SR', 'SV', 'TD', 'TG', 'TH', 'TJ', 'TL', 'TR', 'TZ', 'UA', 'UG', 'US', 'VN', 'WS', 'XK', 'YE', 'ZA', 'ZM', 'ZW'];
-var time = require('time');
 
 function scheduleTasks(cache){
 
@@ -19,7 +18,7 @@ function scheduleTasks(cache){
     	//daily at midnight
     	fetchNewestLoans(cache);
 
-  	},null, true,"America/New_York");
+  	},null, true, null;
 
 }
 
