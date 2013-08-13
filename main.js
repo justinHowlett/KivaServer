@@ -33,6 +33,20 @@ http.createServer(function (request, serverResponse) {
       var kivaNewestRequest = Object.create(kivaFeeds.NewestRequest);
       kivaNewestRequest.makeRequest(request,serverResponse,cache);
 
+    }else if (endPoint == '/partners/'){
+      
+      var kivaFeeds = require('./kivaFeeds.js');
+      var queryString = url.parse(request.url, true).query;
+
+      if (queryString){
+        var kivaPartnerIdRequest = Object.create(kivaFeeds.PartnerIdRequest);
+        kivaPartnerIdRequest.makeRequest(request,serverResponse,cache,queryString.partnerid);
+      }else{
+        var kivaPartnersRequest = Object.create(kivaFeeds.PartnerRequest);
+        kivaPartnersRequest.makeRequest(request,serverResponse,cache);
+      }
+
+      
     }else{
       serverResponse.writeHead(404, {'Content-Type': 'application/json'});
       serverResponse.end();

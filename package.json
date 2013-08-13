@@ -1,0 +1,26 @@
+{
+  "name": "kiva",
+  "version": "0.0.0-2",
+  "description": "KivaServer ==========",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "main.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "ssh://520864724382ec13ed000102@kiva-justinhowlett.rhcloud.com/~/git/kiva.git/"
+  },
+  "dependencies": {
+    "cron": "1.0.1",
+    "memory-cache": "0.0.5",
+    "node-schedule": "0.1.8",
+    "request": "2.26.0"
+  },
+  "author": "Justin Howlett",
+  "license": "BSD",
+  "subdomain": "justinDHowlett-KivaServer",
+  "engines": {
+    "node": "0.8.x"
+  }
+}

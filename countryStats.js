@@ -3,7 +3,7 @@ var worldBankBaseURL            = 'http://api.worldbank.org/countries/';
 var worldBankIndicatorsEndpoint = '/indicators/';
 var defaultDataRange 			      = '2010:2010';
 var msPerDay 				            = 86400000;
-var cacheLengthDays				      = 60; 
+var cacheLengthDays				      = 10; 
 
 var CountryRequest = {
   
@@ -28,7 +28,7 @@ var CountryRequest = {
         if (completedRequests == wbIndicators.length-1){
 
           var jsonResponse = JSON.stringify(concatResponse);
-          cache.put(tempRequestUrl, jsonResponse, cacheLengthDays*msPerDay); 
+          cache.put(tempRequestUrl, jsonResponse); //store forever
 
           if (serverResponse != null){
               serverResponse.end(jsonResponse);
