@@ -6,16 +6,16 @@ This API serves to proxy, cache and optimize responses from Kiva.org and the Wor
 API Methods:
 
 Country Statistics:
-<Base URL>/countries/?countrycode=ZM
+`<Base URL>/countries/?countrycode=ZM`
 
 Kiva's Newest Loans:
-<Base URL>/kiva/newest/
+`<Base URL>/kiva/newest/`
 
 Kiva.org all partners 
-<Base URL>/kiva/partners/
+`<Base URL>/kiva/partners/`
 
 Kiva.org partner by id
-<Base URL>/kiva/partners/?partnerid=16
+`<Base URL>/kiva/partners/?partnerid=16`
 
 Server Organization:
 
