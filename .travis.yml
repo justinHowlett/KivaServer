@@ -1,9 +1,7 @@
 language: node_js
 
 node_js:
-  - 0.8
-
-before_install: ./install_dependencies.sh
+  - 0.10
 
 deploy:
   provider: nodejitsu

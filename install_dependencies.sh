@@ -1,1 +1,0 @@
-jitsu --version
