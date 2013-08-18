@@ -1,6 +1,5 @@
 var common = require('./common.js');
 
-
 function parseToDatabase(){
 	prepareS3Requests(true);
 }
@@ -29,7 +28,7 @@ function makeS3Request(requestUrl,shouldSave){
 
     	if (error) {
     		//retry, prob connection closed on s3 end
-    		validateS3Request(requestUrl);
+    		makeS3Request(requestUrl);
   		}else if (response.statusCode != 200){
   			console.log('invalid s3 request '+requestUrl+' status code is '+response.statusCode);
   		}else if (shouldSave){

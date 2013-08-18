@@ -37,7 +37,7 @@ http.createServer(function (request, serverResponse) {
       var kivaNewestRequest = Object.create(kivaFeeds.NewestRequest);
       kivaNewestRequest.makeRequest(request,serverResponse,cache);
 
-    }else if (endPoint == '/partners/'){
+    }else if (endPoint == '/kiva/partners/'){
       
       var kivaFeeds = require('./kivaFeeds.js');
       var queryString = url.parse(request.url, true).query;
