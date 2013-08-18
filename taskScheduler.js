@@ -1,4 +1,4 @@
-var kivaSupportedCountries = ['AF', 'AL', 'AM', 'AZ', 'BA', 'BD', 'BF', 'BG', 'BI', 'BJ', 'BO', 'BW', 'BZ', 'CD', 'CG', 'CI', 'CL', 'CM', 'CO', 'CR', 'DO', 'EC', 'GE', 'GH', 'GT', 'GZ', 'HN', 'HT', 'ID', 'IL', 'IN', 'IQ', 'JO', 'KE', 'KG', 'KH', 'LB', 'LK', 'LR', 'MD', 'ML', 'MN', 'MW', 'MX', 'MZ', 'NA', 'NG', 'NI', 'NP', 'PA', 'PE', 'PH', 'PK', 'PS', 'PY', 'QS', 'RW', 'SL', 'SN', 'SO', 'SR', 'SV', 'TD', 'TG', 'TH', 'TJ', 'TL', 'TR', 'TZ', 'UA', 'UG', 'US', 'VN', 'WS', 'XK', 'YE', 'ZA', 'ZM', 'ZW'];
+var common = require('./common.js');
 
 function scheduleTasks(cache){
 
@@ -21,18 +21,16 @@ function fetchAllCountryInfo(cache){
 
 	console.log('fetching all country info');
 
-	for (var i in kivaSupportedCountries){
+	for (var i in common.kivaSupportedCountries){
 
 		var country = require('./countryStats.js');
-		var countryCode = kivaSupportedCountries[i];
 
 		var request = require('request');
-		request.url = '/countries/?countrycode='+ countryCode;
+		request.url = '/countries/?countrycode='+ i;
 		
 		var countryRequest = Object.create(country.CountryRequest);
 
-      	countryRequest.makeRequest(request,null,countryCode,cache);
-
+      	countryRequest.makeRequest(request,null,i,cache);
 	}
 
 }
