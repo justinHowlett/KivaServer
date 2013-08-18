@@ -9,7 +9,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "ssh://520864724382ec13ed000102@kiva-justinhowlett.rhcloud.com/~/git/kiva.git/"
+    "url": "git@github.com:justinHowlett/KivaServer.git"
   },
   "dependencies": {
     "cron": "1.0.1",
