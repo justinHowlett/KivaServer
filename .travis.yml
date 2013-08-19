@@ -2,8 +2,7 @@ node_js:
 - 0.1
 deploy: 
   user: justindhowlett
-  api_key: 
-    secure: PLmiBHFYdia/A5D2t5uvi8jruGmBYKj/pO9YI8Na/BqpPAdbJNO5KeAgonkSfHMqzogEog9RLDILpSfwr3dCG/C/UNA6qAUT8M2itVzOtA6211xMb1GDEidm4MuCOc+619njpjEybFaB6Tb7ZNeLRNBPTmdd0D8LY4Bni9IEmUc=
+  api_key: d888208b-18ae-4894-82c3-ba1b77bfb940 
   provider: nodejitsu
   "on": 
     repo: justinHowlett/KivaServer
