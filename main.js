@@ -3,11 +3,11 @@ var cache = require('memory-cache');
 var url   = require('url');
 var tasks = require('./taskScheduler.js');
 
-var dbConfig = require('./dbconfig.js');
+var dbControl = require('./dbcontrol.js');
 
 /* prepare the cache, cron jobs and database, while also running the test suite */
 tasks.scheduleTasks(cache);
-dbConfig.configureDatabase()
+dbControl.configureDatabase()
 
 http.createServer(function (request, serverResponse) {
 
