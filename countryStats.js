@@ -22,7 +22,12 @@ var CountryRequest = {
    
       wbRequest(requestUrl, function(error, response, body) {
        
-        concatResponse.push(body);
+        var indicatorResponseObject = JSON.parse(body);
+        //indicatorResponseObject[0]; is paging info, to be discarded
+        //indicatorResponseObject[1]; is the actual indicator response
+        var indicatorResponse = indicatorResponseObject[1];
+
+        concatResponse.push(JSON.stringify(indicatorResponse));
         completedRequests ++;
         
         if (completedRequests == wbIndicators.length-1){
