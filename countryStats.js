@@ -1,3 +1,6 @@
+var s3Feeds = require('./s3Feeds.js');
+var common = require('./common.js');
+
 var wbIndicators = ['SP.POP.TOTL','SL.UEM.TOTL.ZS','NY.GDP.MKTP.KD.ZG','NY.GDP.PCAP.CD','SE.SEC.ENRR','SE.ADT.1524.LT.ZS','SH.DYN.MORT','EG.ELC.ACCS.ZS','SL.TLF.0714.WK.MA.ZS','SL.TLF.0714.WK.MA.ZS','IS.ROD.PAVE.ZS','SP.DYN.LE00.IN','SH.TBS.INCD','SH.STA.MALN.ZS','SP.DYN.LE00.IN','SH.TBS.INCD','SH.STA.MALN.ZS','SH.DYN.AIDS.ZS','SH.MLR.INCD'];
 var worldBankBaseURL            = 'http://api.worldbank.org/countries/';
 var worldBankIndicatorsEndpoint = '/indicators/';
@@ -32,12 +35,26 @@ var CountryRequest = {
         
         if (completedRequests == wbIndicators.length-1){
 
-          var jsonResponse = JSON.stringify(concatResponse);
-          cache.put(tempRequestUrl, jsonResponse); //store forever
-        
-          if (serverResponse != null){
+          console.log('request complete for code  '+countryCode);
+
+          // var countryName = common.kivaSupportedCountriesDict[countryCode];
+          //get background image and associated info from S3 in form of an Object 
+          s3Feeds.makeRequestsForCountry('Albania','AL',function(countryImage){
+            concatResponse.unshift(countryImage);
+
+            console.log('country att is '+countryImage.attribution);
+            console.log('country link is '+countryImage.link);
+
+            var jsonResponse = JSON.stringify(concatResponse);
+            cache.put(tempRequestUrl, jsonResponse); //store forever
+          
+            console.log('jsonResponse is '+jsonResponse);
+
+            if (serverResponse != null){
               serverResponse.end(jsonResponse);
-          }
+            }
+
+         });
           
         }
         

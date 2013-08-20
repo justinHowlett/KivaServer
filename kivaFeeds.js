@@ -64,8 +64,6 @@ var PartnerIdRequest = {
         }
       }
       
-      console.log('indie is ' +individualPartnerJson);
-      
       cache.put(request.url, individualPartnerJson, partnerCacheLengthDays*msPerDay); 
     
       if (serverResponse != null){

@@ -19,9 +19,9 @@ function scheduleTasks(cache){
 
 function fetchAllCountryInfo(cache){
 
-	console.log('fetching all country info');
-
 	for (var i in common.kivaSupportedCountries){
+
+		console.log('fetching country info for '+i);
 
 		var country = require('./countryStats.js');
 

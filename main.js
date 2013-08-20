@@ -5,9 +5,12 @@ var tasks = require('./taskScheduler.js');
 
 var dbControl = require('./dbcontrol.js');
 
-/* prepare the cache, cron jobs and database, while also running the test suite */
+/* prepare the database from S3 files on completion populate the cache and scheduled the cron jobs  */
+// dbControl.configureDatabase(function(){
+//   console.log('db ready');
+// })
+
 tasks.scheduleTasks(cache);
-dbControl.configureDatabase()
 
 http.createServer(function (request, serverResponse) {
 

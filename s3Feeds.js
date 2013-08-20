@@ -1,23 +1,8 @@
 var common = require('./common.js');
 var dbControl = require('./dbcontrol.js');
 
-function parseToDatabase(){
-	console.log("parsing s3 feeds to db");
-	prepareS3Requests(true);
-}
 
-function prepareS3Requests(shouldSave){
-	var supportedCountries = common.kivaSupportedCountries;
-
-	for (var i in common.kivaSupportedCountries){
-
-		var countryName = sanitizedString(common.kivaSupportedCountries[i].toString());
-
-		makeRequestsForCountry(countryName,i);
-	}
-}
-
-function makeRequestsForCountry(countryname,countryCode){
+function makeRequestsForCountry(countryname,countryCode,callback){
 
 	var imageUrl = 'https://kiva_images.s3.amazonaws.com/'+countryname+'/original.jpg';
 	var attributionUrl = 'https://kiva_images.s3.amazonaws.com/'+countryname+'/attribution.txt';
@@ -30,37 +15,33 @@ function makeRequestsForCountry(countryname,countryCode){
 	makeS3Request(imageUrl,true,function(responseBody){
 		//response body in this case is a buffer when passing true for binaryresponse, we then turn the buffer into a base64 string
 		imageBase64 = responseBody.toString('base64');
-		validateCountry(countryname,countryCode,imageBase64,attributionText,linkText);
+		validateCountry(countryname,countryCode,imageBase64,attributionText,linkText,callback);
 	});
 	makeS3Request(attributionUrl,false,function(responseBody){
 		attributionText = responseBody;
-		validateCountry(countryname,countryCode,imageBase64,attributionText,linkText);
+		validateCountry(countryname,countryCode,imageBase64,attributionText,linkText,callback);
 	});
 	makeS3Request(linkUrl,false,function(responseBody){
 		linkText = responseBody;
-		validateCountry(countryname,countryCode,imageBase64,attributionText,linkText);
+		validateCountry(countryname,countryCode,imageBase64,attributionText,linkText,callback);
 	});
 }
 
-function validateCountry(countryname,countryCode,imageBase64,attribution,link){
+function validateCountry(countryname,countryCode,imageBase64,attribution,link,callback){
 
 	if (attribution != null && imageBase64 != null && link!= null){
 		console.log('country valid for name' +countryname+' saving to db');
-		saveCountryToDatabase(countryname,countryCode,imageBase64,attribution,link);
+		var countryImage = {};
+    countryImage.name = countryname;
+    countryImage.imageBase64 = imageBase64.toString();
+    countryImage.attribution = attribution.toString();
+    countryImage.link = link.toString();
+
+    callback(countryImage);
+
 	}
 }
 
-function saveCountryToDatabase(countryname,countryCode,imageBase64,attribution,link){
-
-	var countryObject = new Object();
-    countryObject.name = countryname;
-    countryObject.countryCode = countryCode;
-    countryObject.attribution = attribution;
-    countryObject.link = link;
-    countryObject.base64Image = imageBase64;
-
-    dbControl.addCountryObjectToDatabase(countryObject,null);
-}
 
 function makeS3Request(requestUrl,binaryresponse,callback){
 
@@ -104,4 +85,4 @@ function sanitizedString(string)
     return capitalisedString.replace(/ /g,"_"); //space to underscore
 }
 
-exports.parseToDatabase = parseToDatabase;
+exports.makeRequestsForCountry = makeRequestsForCountry;
