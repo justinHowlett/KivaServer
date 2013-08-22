@@ -5,16 +5,17 @@ KivaServer
 
 <h3>API Methods:</h3>
 
-Country Statistics:
-`<Base URL>/countries/?countrycode=ZM`
+GET Country Statistics:
+(base 64 is optional)
+`<Base URL>/countries/?countrycode=ZM&base64=true`
 
-Kiva's Newest Loans:
+GET Kiva's Newest Loans:
 `<Base URL>/kiva/newest/`
 
-Kiva.org all partners 
+GET Kiva.org all partners 
 `<Base URL>/kiva/partners/`
 
-Kiva.org partner by id
+GET Kiva.org partner by id
 `<Base URL>/kiva/partners/?partnerid=16`
 
 <h2>Server Organization:</h2>
