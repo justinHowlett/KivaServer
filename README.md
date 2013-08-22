@@ -6,8 +6,9 @@ KivaServer
 <h3>API Methods:</h3>
 
 GET Country Statistics:
-<br/> (base 64 is optional and includes the provided country image as inline base64 instead of a link)
 `<Base URL>/countries/?countrycode=ZM&base64=true`
+<br/> (base 64 is optional and includes the provided country image as inline base64 instead of a link)
+
 
 GET Kiva's Newest Loans:
 `<Base URL>/kiva/newest/`
