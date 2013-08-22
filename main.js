@@ -32,7 +32,9 @@ http.createServer(function (request, serverResponse) {
       var country = require('./countryStats.js');
       var queryString = url.parse(request.url, true).query;
       var countryRequest = Object.create(country.CountryRequest);
-      countryRequest.makeRequest(request,serverResponse,queryString.countrycode,cache);
+
+      console.log('queryString.base64 is '+queryString.base64);
+      countryRequest.makeRequest(request,serverResponse,queryString.countrycode,queryString.base64,cache);
 
     }else if (endPoint == '/kiva/newest/'){
       

@@ -30,7 +30,7 @@ function fetchAllCountryInfo(cache){
 		
 		var countryRequest = Object.create(country.CountryRequest);
 
-      	countryRequest.makeRequest(request,null,i,cache);
+      	countryRequest.makeRequest(request,null,i,null,cache);
 	}
 
 }

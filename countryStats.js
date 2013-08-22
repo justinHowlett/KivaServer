@@ -10,11 +10,14 @@ var cacheLengthDays				      = 10;
 
 var CountryRequest = {
   
-  makeRequest: function (request,serverResponse,countryCode,cache) {
+  makeRequest: function (request,serverResponse,countryCode,inlineImage,cache) {
   
     var completedRequests = 0;
     var concatResponse = [];
     
+    console.log('inlineImage is '+inlineImage);
+    console.log('cache is '+cache);
+
     for (var i in wbIndicators){
 
       var indicator  = wbIndicators[i];
@@ -35,20 +38,13 @@ var CountryRequest = {
         
         if (completedRequests == wbIndicators.length-1){
 
-          console.log('request complete for code  '+countryCode);
-
           // var countryName = common.kivaSupportedCountriesDict[countryCode];
           //get background image and associated info from S3 in form of an Object 
-          s3Feeds.makeRequestsForCountry('Albania','AL',function(countryImage){
+          s3Feeds.makeRequestsForCountry('Albania','AL',inlineImage,function(countryImage){
             concatResponse.unshift(countryImage);
-
-            console.log('country att is '+countryImage.attribution);
-            console.log('country link is '+countryImage.link);
 
             var jsonResponse = JSON.stringify(concatResponse);
             cache.put(tempRequestUrl, jsonResponse); //store forever
-          
-            console.log('jsonResponse is '+jsonResponse);
 
             if (serverResponse != null){
               serverResponse.end(jsonResponse);
