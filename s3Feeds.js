@@ -44,8 +44,9 @@ function validateCountry(countryname,countryCode,imageBase64,attribution,link,ca
     var countryImage = {};
     countryImage.name = countryname;
     countryImage.imageBase64 = imageBase64;
-    countryImage.attribution = attribution;
-    countryImage.link = link;
+    countryImage.attributionName = attribution;
+    countryImage.attributionLink = link;
+    countryImage.imageUrl = 'https://kiva_images.s3.amazonaws.com/'+countryname+'/original.jpg';
 
     callback(countryImage);
 
