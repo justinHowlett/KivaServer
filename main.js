@@ -39,7 +39,7 @@ http.createServer(function (request, serverResponse) {
     }else if (endPoint == '/kiva/newest/'){
       
       var kivaFeeds = require('./kivaFeeds.js');
-      var kivaNewestRequest = Object.create(kivaFeeds.NewestRequest);
+      var kivaNewestRequest = Object.create(kivaFeeds.newestRequest);
       kivaNewestRequest.makeRequest(request,serverResponse,cache);
 
     }else if (endPoint == '/kiva/partners/'){
@@ -47,15 +47,18 @@ http.createServer(function (request, serverResponse) {
       var kivaFeeds = require('./kivaFeeds.js');
       var queryString = url.parse(request.url, true).query;
 
-      if (queryString){
-        var kivaPartnerIdRequest = Object.create(kivaFeeds.PartnerIdRequest);
+      if (queryString.partnerid != null && typeof queryString.partnerid !== "undefined"){
+        var kivaPartnerIdRequest = Object.create(kivaFeeds.partnerIdRequest);
         kivaPartnerIdRequest.makeRequest(request,serverResponse,cache,queryString.partnerid);
       }else{
-        var kivaPartnersRequest = Object.create(kivaFeeds.PartnerRequest);
+        var kivaPartnersRequest = Object.create(kivaFeeds.partnersRequest);
         kivaPartnersRequest.makeRequest(request,serverResponse,cache);
       }
-
       
+    }else if (endPoint == '/loaderio-cd1a021f6ca4d51049205bf21227fe8d/'){
+
+      serverResponse.end('loaderio-cd1a021f6ca4d51049205bf21227fe8d');
+
     }else{
       serverResponse.writeHead(404, {'Content-Type': 'application/json'});
       serverResponse.end();

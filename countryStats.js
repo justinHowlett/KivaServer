@@ -41,9 +41,7 @@ var CountryRequest = {
           s3Feeds.makeRequestsForCountry(countryName,countryCode,inlineImage,function(countryImage){
             // concatResponse.unshift(countryImage);
 
-            var responseObject = {};
-            responseObject.countryImage = countryImage;
-            responseObject.indicators = concatResponse;
+            var responseObject = {countryImage: countryImage, indicators: concatResponse};
 
             var jsonResponse = JSON.stringify(responseObject);
             cache.put(tempRequestUrl, jsonResponse); //store forever

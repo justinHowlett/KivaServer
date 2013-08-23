@@ -6,7 +6,7 @@ var msPerDay                 = 86400000;
 var newestcacheLengthDays    = 1; 
 var partnerCacheLengthDays   = 10;
 
-var NewestRequest = {
+var newestRequest = {
   
   makeRequest: function (request,serverResponse,cache) {
   
@@ -25,15 +25,14 @@ var NewestRequest = {
   }
 };
 
-var PartnersRequest = {
+var partnersRequest = {
   
   makeRequest: function (request,serverResponse,cache) {
-  
+
     var requestUrl = partnersBaseUrl+'?app_id='+kivaAppId;
-    var wbRequest = require('request');
+    var partnerRequest = require('request');
  
-    wbRequest(requestUrl, function(error, response, body) {
-      console.log('partners: '+body);
+    partnerRequest(requestUrl, function(error, response, body) {
       cache.put(request.url, body, partnerCacheLengthDays*msPerDay); 
     
       if (serverResponse != null){
@@ -44,14 +43,14 @@ var PartnersRequest = {
   }
 };
 
-var PartnerIdRequest = {
+var partnerIdRequest = {
   
   makeRequest: function (request,serverResponse,cache,partnerId) {
-  
+
     var requestUrl = partnersBaseUrl+'?app_id='+kivaAppId;
-    var wbRequest = require('request');
+    var partnerRequest = require('request');
  
-    wbRequest(requestUrl, function(error, response, body) {
+    partnerRequest(requestUrl, function(error, response, body) {
       
       var fullResponse = JSON.parse(body);
       var individualPartnerJson;
@@ -59,6 +58,7 @@ var PartnerIdRequest = {
       for (var i in fullResponse['partners']){
         var partner = fullResponse['partners'][i];
 
+        var tempPartnerId = partnerId;
         if (partner['id'] == partnerId){
            individualPartnerJson = JSON.stringify(partner);
         }
@@ -74,6 +74,6 @@ var PartnerIdRequest = {
   }
 };
 
-exports.PartnerIdRequest  = PartnerIdRequest;
-exports.PartnersRequest   = PartnersRequest;
-exports.NewestRequest     = NewestRequest;
+exports.partnerIdRequest  = partnerIdRequest;
+exports.partnersRequest   = partnersRequest;
+exports.newestRequest     = newestRequest;
