@@ -4,6 +4,9 @@ var dbControl = require('./dbcontrol.js');
 
 function makeRequestsForCountry(countryname,countryCode,inlineImage,callback){
 
+  //replace spaces with underscore and capitalize first character
+  countryname = formattedString(countryname.toString());
+
 	var imageUrl = 'https://kiva_images.s3.amazonaws.com/'+countryname+'/original.jpg';
 	var attributionUrl = 'https://kiva_images.s3.amazonaws.com/'+countryname+'/attribution.txt';
 	var linkUrl = 'https://kiva_images.s3.amazonaws.com/'+countryname+'/url.txt';
@@ -38,7 +41,7 @@ function validateCountry(countryname,countryCode,imageBase64,attribution,link,ca
 
 	if (attribution != null && link != null){
     
-    if (typeof inlineImage !== "undefined" && imageBase64 == null)
+    if (typeof inlineImage !== "undefined" && inlineImage != null && imageBase64 == null)
       return;
 
     var countryImage = {};
@@ -90,7 +93,7 @@ function makeS3Request(requestUrl,binaryresponse,callback){
     });
 }
 
-function sanitizedString(string)
+function formattedString(string)
 {
 	var capitalisedString = string.charAt(0).toUpperCase() + string.slice(1);
     return capitalisedString.replace(/ /g,"_"); //space to underscore

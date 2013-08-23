@@ -14,9 +14,6 @@ var CountryRequest = {
   
     var completedRequests = 0;
     var concatResponse = [];
-    
-    console.log('inlineImage is '+inlineImage);
-    console.log('cache is '+cache);
 
     for (var i in wbIndicators){
 
@@ -33,17 +30,22 @@ var CountryRequest = {
         //indicatorResponseObject[1]; is the actual indicator response
         var indicatorResponse = indicatorResponseObject[1];
 
-        concatResponse.push(JSON.stringify(indicatorResponse));
+        concatResponse.push(indicatorResponse);
         completedRequests ++;
         
         if (completedRequests == wbIndicators.length-1){
 
-          // var countryName = common.kivaSupportedCountriesDict[countryCode];
-          //get background image and associated info from S3 in form of an Object 
-          s3Feeds.makeRequestsForCountry('Albania','AL',inlineImage,function(countryImage){
-            concatResponse.unshift(countryImage);
+          var countryName = common.kivaSupportedCountries[countryCode];
 
-            var jsonResponse = JSON.stringify(concatResponse);
+          //get background image and associated info from S3 in form of an Object 
+          s3Feeds.makeRequestsForCountry(countryName,countryCode,inlineImage,function(countryImage){
+            // concatResponse.unshift(countryImage);
+
+            var responseObject = {};
+            responseObject.countryImage = countryImage;
+            responseObject.indicators = concatResponse;
+
+            var jsonResponse = JSON.stringify(responseObject);
             cache.put(tempRequestUrl, jsonResponse); //store forever
 
             if (serverResponse != null){
