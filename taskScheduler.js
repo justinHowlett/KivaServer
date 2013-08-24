@@ -2,10 +2,12 @@ var common = require('./common.js');
 
 function scheduleTasks(cache){
 
-	//fetch cachable data on server start
-	fetchAllCountryInfo(cache);
-	fetchNewestLoans(cache);
-	fetchAllPartners(cache);
+	//fetch cachable data on server start synchronously
+	fetchAllCountryInfo(cache,function(){
+		fetchNewestLoans(cache,function(){
+			fetchAllPartners(cache);
+		});
+	});
 	
 	var cronJob = require('cron').CronJob;
 
@@ -18,7 +20,7 @@ function scheduleTasks(cache){
 
 }
 
-function fetchAllCountryInfo(cache){
+function fetchAllCountryInfo(cache,callback){
 
 	var commonKeys = Object.keys(common.kivaSupportedCountries); 
 
@@ -45,7 +47,7 @@ function fetchAllCountryInfo(cache){
 
 }
 
-function fetchNewestLoans(cache){
+function fetchNewestLoans(cache,callback){
 
 	var kivaFeeds = require('./kivaFeeds.js');
     var kivaNewestRequest = Object.create(kivaFeeds.newestRequest);
@@ -55,7 +57,7 @@ function fetchNewestLoans(cache){
 	kivaNewestRequest.makeRequest(request,null,cache,null);
 }
 
-function fetchAllPartners(cache){
+function fetchAllPartners(cache,callback){
 
 	//no partner id 0
 	partnerRequest(1);

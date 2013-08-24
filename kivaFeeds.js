@@ -15,6 +15,7 @@ var newestRequest = {
  
     wbRequest(requestUrl, function(error, response, body) {
 
+      console.log('newest complete for url '+request.url);
       cache.put(request.url, body, newestcacheLengthDays*msPerDay); 
 
       if (callback){

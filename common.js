@@ -14,7 +14,7 @@ var kivaSupportedCountriesDict ={
      GT:["guatemala"],
      HN:["honduras"],
      ID:["indonesia"],
-     IL:["isreal"],
+     IL:["israel"],
      IN:["india"],
      IQ:["iraq"],
      JO:["jordan"],
