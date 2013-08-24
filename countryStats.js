@@ -10,7 +10,7 @@ var cacheLengthDays				      = 10;
 
 var CountryRequest = {
   
-  makeRequest: function (request,serverResponse,countryCode,inlineImage,cache) {
+  makeRequest: function (request,serverResponse,countryCode,inlineImage,cache,callback) {
   
     var completedRequests = 0;
     var concatResponse = [];
@@ -39,12 +39,13 @@ var CountryRequest = {
 
           //get background image and associated info from S3 in form of an Object 
           s3Feeds.makeRequestsForCountry(countryName,countryCode,inlineImage,function(countryImage){
-            // concatResponse.unshift(countryImage);
-
+           
             var responseObject = {countryImage: countryImage, indicators: concatResponse};
 
             var jsonResponse = JSON.stringify(responseObject);
             cache.put(tempRequestUrl, jsonResponse); //store forever
+
+            callback();
 
             if (serverResponse != null){
               serverResponse.end(jsonResponse);

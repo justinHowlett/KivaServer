@@ -8,7 +8,7 @@ var partnerCacheLengthDays   = 10;
 
 var newestRequest = {
   
-  makeRequest: function (request,serverResponse,cache) {
+  makeRequest: function (request,serverResponse,cache,callback) {
   
     var requestUrl = newestLoansBaseUrl+'?app_id='+kivaAppId+'&per_page='+numberOfNewestLoans;
     var wbRequest = require('request');
@@ -16,7 +16,12 @@ var newestRequest = {
     wbRequest(requestUrl, function(error, response, body) {
 
       cache.put(request.url, body, newestcacheLengthDays*msPerDay); 
-    
+
+      if (callback){
+          callback();
+      }
+      
+
       if (serverResponse != null){
           serverResponse.end(body);
       }
@@ -27,13 +32,16 @@ var newestRequest = {
 
 var partnersRequest = {
   
-  makeRequest: function (request,serverResponse,cache) {
+  makeRequest: function (request,serverResponse,cache,callback) {
 
     var requestUrl = partnersBaseUrl+'?app_id='+kivaAppId;
     var partnerRequest = require('request');
  
     partnerRequest(requestUrl, function(error, response, body) {
       cache.put(request.url, body, partnerCacheLengthDays*msPerDay); 
+      if (callback){
+          callback();
+      }
     
       if (serverResponse != null){
           serverResponse.end(body);
@@ -45,13 +53,16 @@ var partnersRequest = {
 
 var partnerIdRequest = {
   
-  makeRequest: function (request,serverResponse,cache,partnerId) {
+  makeRequest: function (request,serverResponse,cache,partnerId,callback) {
 
     var requestUrl = partnersBaseUrl+'?app_id='+kivaAppId;
     var partnerRequest = require('request');
+    partnerRequest.test = request.url;
  
     partnerRequest(requestUrl, function(error, response, body) {
       
+      console.log('preparing cache request for url' +partnerRequest.test);
+
       var fullResponse = JSON.parse(body);
       var individualPartnerJson;
 
@@ -64,7 +75,12 @@ var partnerIdRequest = {
         }
       }
       
+      console.log('putting cache request for url' +request.url);
       cache.put(request.url, individualPartnerJson, partnerCacheLengthDays*msPerDay); 
+      if (callback){
+          callback();
+      }
+      
     
       if (serverResponse != null){
           serverResponse.end(individualPartnerJson);

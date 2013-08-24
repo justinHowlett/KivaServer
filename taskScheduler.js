@@ -21,18 +21,28 @@ function scheduleTasks(cache){
 
 function fetchAllCountryInfo(cache){
 
-	for (var i in common.kivaSupportedCountries){
+	var commonKeys = Object.keys(common.kivaSupportedCountries); 
 
-		console.log('fetching country info for '+i);
+	makeCountryRequest(0);
+
+	function makeCountryRequest(i){
+
+		if (i > commonKeys.count-1){
+			return;
+		}
+
+		var countryCode = commonKeys[i];
 
 		var country = require('./countryStats.js');
-
 		var request = require('request');
-		request.url = '/countries/?countrycode='+ i;
-		
-		var countryRequest = Object.create(country.CountryRequest);
 
-      	countryRequest.makeRequest(request,null,i,null,cache);
+		request.url = '/countries/?countrycode='+ countryCode;
+		var countryRequest = Object.create(country.CountryRequest);
+		countryRequest.makeRequest(request,null,countryCode,null,cache,function(){
+			console.log('country request back for code '+countryCode);
+			makeCountryRequest(i+1);
+		});
+
 	}
 
 }
@@ -44,23 +54,34 @@ function fetchNewestLoans(cache){
     var request = require('request');
     request.url = '/kiva/newest/';
 
-	kivaNewestRequest.makeRequest(request,null,cache);
+	kivaNewestRequest.makeRequest(request,null,cache,null);
 }
 
 function fetchAllPartners(cache){
+	
+	//no partner id 0
+	partnerRequest(1);
 
-
-	// for (var i=0; i<300; i++){
-
-	// 	var kivaFeeds = require('./kivaFeeds.js');
-	// 	var request = require('request');
+	//synchronously request the partners, prevent flooding with requests
+	function partnerRequest(i){
 		
-	//     request.url = '/kiva/partners/?partnerid='+i.toString();
-	//     console.log('request url is '+request.url);
-	// 	var kivaPartnerIdRequest = Object.create(kivaFeeds.partnerIdRequest);
-	// 	kivaPartnerIdRequest.url = request.url;
-	//     kivaPartnerIdRequest.makeRequest(request,null,cache,i.toString());
-	// }
+		if (i>=300){
+			return;
+		}
+
+		console.log('partner request for iterator '+i);
+
+		var kivaFeeds = require('./kivaFeeds.js');
+		var request = require('request');
+		
+	    request.url = '/kiva/partners/?partnerid='+i.toString();
+		var kivaPartnerIdRequest = Object.create(kivaFeeds.partnerIdRequest);
+		kivaPartnerIdRequest.url = request.url;
+	    kivaPartnerIdRequest.makeRequest(request,null,cache,i.toString(),function(){
+       		partnerRequest(i+1);
+     	});
+	}
+
 }
 
 exports.scheduleTasks = scheduleTasks;

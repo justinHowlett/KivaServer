@@ -84,6 +84,7 @@ function makeS3Request(requestUrl,binaryresponse,callback){
   		}else if (response.statusCode != 200){
   			//this should have been caught by the unit tests
   			console.log('invalid s3 request '+requestUrl+' status code is '+response.statusCode);
+
   		}else {
   			if (callback){
   				callback(body);
