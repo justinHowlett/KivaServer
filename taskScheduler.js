@@ -18,7 +18,6 @@ function scheduleTasks(cache){
 
 }
 
-
 function fetchAllCountryInfo(cache){
 
 	var commonKeys = Object.keys(common.kivaSupportedCountries); 
@@ -32,12 +31,11 @@ function fetchAllCountryInfo(cache){
 		}
 
 		var countryCode = commonKeys[i];
-
 		var country = require('./countryStats.js');
-		var request = require('request');
-
-		request.url = '/countries/?countrycode='+ countryCode;
 		var countryRequest = Object.create(country.CountryRequest);
+		var request = require('request');
+		request.url = '/countries/?countrycode='+ countryCode;
+		
 		countryRequest.makeRequest(request,null,countryCode,null,cache,function(){
 			console.log('country request back for code '+countryCode);
 			makeCountryRequest(i+1);
@@ -58,7 +56,7 @@ function fetchNewestLoans(cache){
 }
 
 function fetchAllPartners(cache){
-	
+
 	//no partner id 0
 	partnerRequest(1);
 
@@ -69,14 +67,11 @@ function fetchAllPartners(cache){
 			return;
 		}
 
-		console.log('partner request for iterator '+i);
-
 		var kivaFeeds = require('./kivaFeeds.js');
-		var request = require('request');
-		
-	    request.url = '/kiva/partners/?partnerid='+i.toString();
 		var kivaPartnerIdRequest = Object.create(kivaFeeds.partnerIdRequest);
-		kivaPartnerIdRequest.url = request.url;
+		var request = require('request');
+	    request.url = '/kiva/partners/?partnerid='+i.toString();
+
 	    kivaPartnerIdRequest.makeRequest(request,null,cache,i.toString(),function(){
        		partnerRequest(i+1);
      	});

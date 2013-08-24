@@ -21,7 +21,6 @@ var newestRequest = {
           callback();
       }
       
-
       if (serverResponse != null){
           serverResponse.end(body);
       }
@@ -38,7 +37,9 @@ var partnersRequest = {
     var partnerRequest = require('request');
  
     partnerRequest(requestUrl, function(error, response, body) {
+      
       cache.put(request.url, body, partnerCacheLengthDays*msPerDay); 
+      
       if (callback){
           callback();
       }
@@ -61,12 +62,11 @@ var partnerIdRequest = {
  
     partnerRequest(requestUrl, function(error, response, body) {
       
-      console.log('preparing cache request for url' +partnerRequest.test);
-
       var fullResponse = JSON.parse(body);
       var individualPartnerJson;
 
       for (var i in fullResponse['partners']){
+       
         var partner = fullResponse['partners'][i];
 
         var tempPartnerId = partnerId;
@@ -75,13 +75,12 @@ var partnerIdRequest = {
         }
       }
       
-      console.log('putting cache request for url' +request.url);
       cache.put(request.url, individualPartnerJson, partnerCacheLengthDays*msPerDay); 
+   
       if (callback){
           callback();
       }
       
-    
       if (serverResponse != null){
           serverResponse.end(individualPartnerJson);
       }
