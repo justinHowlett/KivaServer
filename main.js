@@ -56,7 +56,12 @@ http.createServer(function (request, serverResponse) {
         var kivaPartnersRequest = Object.create(kivaFeeds.partnersRequest);
         kivaPartnersRequest.makeRequest(request,serverResponse,cache,null);
       }
-      
+  
+    }else if (endPoint == '/kiva/stats/'){
+      var kivaFeeds = require('./kivaFeeds.js');
+      var kivaStatsRequest = Object.create(kivaFeeds.statsRequest);
+      kivaStatsRequest.makeRequest(request,serverResponse,cache,null);
+
     }else if (endPoint == '/loaderio-cd1a021f6ca4d51049205bf21227fe8d/'){
       //auth token for load testing
       serverResponse.end('loaderio-cd1a021f6ca4d51049205bf21227fe8d');

@@ -5,7 +5,11 @@ function scheduleTasks(cache){
 	//fetch cachable data on server start synchronously
 	fetchAllCountryInfo(cache,function(){
 		fetchNewestLoans(cache,function(){
-			fetchAllPartners(cache);
+			fetchAllPartners(cache,function(){
+				fetchKivaStats(cache,function(){
+					console.log('server setup caching complete');
+				});
+			});
 		});
 	});
 	
@@ -22,13 +26,14 @@ function scheduleTasks(cache){
 
 function fetchAllCountryInfo(cache,callback){
 
-	var commonKeys = Object.keys(common.kivaSupportedCountries); 
-
 	makeCountryRequest(0);
 
 	function makeCountryRequest(i){
 
-		if (i > commonKeys.count-1){
+		var commonKeys = Object.keys(common.kivaSupportedCountries); 
+
+		if (i > commonKeys.length-1){
+			callback();
 			return;
 		}
 
@@ -39,7 +44,7 @@ function fetchAllCountryInfo(cache,callback){
 		request.url = '/countries/?countrycode='+ countryCode;
 		
 		countryRequest.makeRequest(request,null,countryCode,null,cache,function(){
-			console.log('country request back for code '+countryCode);
+			
 			makeCountryRequest(i+1);
 		});
 
@@ -54,8 +59,23 @@ function fetchNewestLoans(cache,callback){
     var request = require('request');
     request.url = '/kiva/newest/';
 
-	kivaNewestRequest.makeRequest(request,null,cache,null);
+	kivaNewestRequest.makeRequest(request,null,cache,function(){
+		callback();
+	});
 }
+
+function fetchKivaStats(cache,callback){
+
+	var kivaFeeds = require('./kivaFeeds.js');
+    var kivaStatsRequest = Object.create(kivaFeeds.statsRequest);
+    var request = require('request');
+    request.url = '/kiva/stats/';
+
+	kivaStatsRequest.makeRequest(request,null,cache,function(){
+		callback();
+	});
+}
+
 
 function fetchAllPartners(cache,callback){
 
@@ -66,6 +86,7 @@ function fetchAllPartners(cache,callback){
 	function partnerRequest(i){
 		
 		if (i>=300){
+			callback();
 			return;
 		}
 
@@ -75,6 +96,7 @@ function fetchAllPartners(cache,callback){
 	    request.url = '/kiva/partners/?partnerid='+i.toString();
 
 	    kivaPartnerIdRequest.makeRequest(request,null,cache,i.toString(),function(){
+	    	console.log('partner request done for partner '+i.toString());
        		partnerRequest(i+1);
      	});
 	}
