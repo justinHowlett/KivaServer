@@ -3,12 +3,8 @@ var cache = require('memory-cache');
 var url   = require('url');
 var tasks = require('./taskScheduler.js');
 
-var dbControl = require('./dbcontrol.js');
-
-/* prepare the database from S3 files on completion populate the cache and scheduled the cron jobs  */
-// dbControl.configureDatabase(function(){
-//   console.log('db ready');
-// })
+// API Versions
+var apiV1 = require('./api/v1/apiv1.js')
 
 tasks.scheduleTasks(cache);
 
@@ -27,40 +23,10 @@ http.createServer(function (request, serverResponse) {
 
     var endPoint = url.parse(request.url, true).pathname;
 
-    if (endPoint == '/countries/'){
-      
-      var country = require('./countryStats.js');
-      var queryString = url.parse(request.url, true).query;
-      var countryRequest = Object.create(country.CountryRequest);
-
-      console.log('queryString.base64 is '+queryString.base64);
-      countryRequest.makeRequest(request,serverResponse,queryString.countrycode,queryString.base64,cache,null);
-
-    }else if (endPoint == '/kiva/newest/'){
-      
-      var kivaFeeds = require('./kivaFeeds.js');
-      var kivaNewestRequest = Object.create(kivaFeeds.newestRequest);
-      kivaNewestRequest.makeRequest(request,serverResponse,cache,null);
-
-    }else if (endPoint == '/kiva/partners/'){
-      
-      var kivaFeeds = require('./kivaFeeds.js');
-      var queryString = url.parse(request.url, true).query;
-
-      if (queryString.partnerid != null && typeof queryString.partnerid !== "undefined"){
-        //partner by id
-        var kivaPartnerIdRequest = Object.create(kivaFeeds.partnerIdRequest);
-        kivaPartnerIdRequest.makeRequest(request,serverResponse,cache,queryString.partnerid,null);
-      }else{
-        //all partners 
-        var kivaPartnersRequest = Object.create(kivaFeeds.partnersRequest);
-        kivaPartnersRequest.makeRequest(request,serverResponse,cache,null);
-      }
-  
-    }else if (endPoint == '/kiva/stats/'){
-      var kivaFeeds = require('./kivaFeeds.js');
-      var kivaStatsRequest = Object.create(kivaFeeds.statsRequest);
-      kivaStatsRequest.makeRequest(request,serverResponse,cache,null);
+    if (endPoint.indexOf("/v1") == 0){
+      //version 1 api request
+      var v1Api = Object.create(apiV1.api);
+      v1Api.handleApiRequest(request,serverResponse,cache,endPoint);
 
     }else if (endPoint == '/loaderio-cd1a021f6ca4d51049205bf21227fe8d/'){
       //auth token for load testing
@@ -70,7 +36,6 @@ http.createServer(function (request, serverResponse) {
       serverResponse.writeHead(404, {'Content-Type': 'application/json'});
       serverResponse.end();
     }
-
   
 }).listen(8080);
 

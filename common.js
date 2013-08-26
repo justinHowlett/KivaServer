@@ -1,3 +1,5 @@
+//common static objects to be used throughout the application and API versions.
+
 var kivaSupportedCountriesDict ={ 
      AL:["albania"], 
      AM:["armenia"],

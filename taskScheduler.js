@@ -38,10 +38,10 @@ function fetchAllCountryInfo(cache,callback){
 		}
 
 		var countryCode = commonKeys[i];
-		var country = require('./countryStats.js');
+		var country = require('./api/v1/countryStats.js');
 		var countryRequest = Object.create(country.CountryRequest);
 		var request = require('request');
-		request.url = '/countries/?countrycode='+ countryCode;
+		request.url = '/v1/countries/?countrycode='+ countryCode;
 		
 		countryRequest.makeRequest(request,null,countryCode,null,cache,function(){
 			
@@ -54,10 +54,10 @@ function fetchAllCountryInfo(cache,callback){
 
 function fetchNewestLoans(cache,callback){
 
-	var kivaFeeds = require('./kivaFeeds.js');
+	var kivaFeeds = require('./api/v1/kivaFeeds.js');
     var kivaNewestRequest = Object.create(kivaFeeds.newestRequest);
     var request = require('request');
-    request.url = '/kiva/newest/';
+    request.url = '/v1/kiva/newest/';
 
 	kivaNewestRequest.makeRequest(request,null,cache,function(){
 		callback();
@@ -66,10 +66,10 @@ function fetchNewestLoans(cache,callback){
 
 function fetchKivaStats(cache,callback){
 
-	var kivaFeeds = require('./kivaFeeds.js');
+	var kivaFeeds = require('./api/v1/kivaFeeds.js');
     var kivaStatsRequest = Object.create(kivaFeeds.statsRequest);
     var request = require('request');
-    request.url = '/kiva/stats/';
+    request.url = '/v1/kiva/stats/';
 
 	kivaStatsRequest.makeRequest(request,null,cache,function(){
 		callback();
@@ -90,10 +90,10 @@ function fetchAllPartners(cache,callback){
 			return;
 		}
 
-		var kivaFeeds = require('./kivaFeeds.js');
+		var kivaFeeds = require('./api/v1/kivaFeeds.js');
 		var kivaPartnerIdRequest = Object.create(kivaFeeds.partnerIdRequest);
 		var request = require('request');
-	    request.url = '/kiva/partners/?partnerid='+i.toString();
+	    request.url = '/v1/kiva/partners/?partnerid='+i.toString();
 
 	    kivaPartnerIdRequest.makeRequest(request,null,cache,i.toString(),function(){
 	    	console.log('partner request done for partner '+i.toString());

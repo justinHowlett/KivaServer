@@ -1,4 +1,4 @@
-var common = require('./common.js');
+var common = require('../../common.js');
 var s3Feeds = require('./s3Feeds.js');
 var MongoClient = require('mongodb').MongoClient, format = require('util').format;  
 var liveDatabase;
