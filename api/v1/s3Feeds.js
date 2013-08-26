@@ -15,7 +15,7 @@ function makeRequestsForCountry(countryname,countryCode,inlineImage,callback){
 	var linkText;
 	var attributionText;
 
-  if (inlineImage){
+  if (inlineImage != null && typeof inlineImage !== 'undefined' && inlineImage == 'true'){
     console.log('inline image request');
     makeS3Request(imageUrl,true,function(responseBody){
     //response body in this case is a buffer when passing true for binaryresponse, we then turn the buffer into a base64 string
@@ -23,7 +23,6 @@ function makeRequestsForCountry(countryname,countryCode,inlineImage,callback){
       validateCountry(countryname,countryCode,imageBase64,attributionText,linkText,callback,inlineImage);
     });
   }
-
   //attribution name
 	makeS3Request(attributionUrl,false,function(responseBody){
 		attributionText = responseBody;
@@ -41,7 +40,7 @@ function validateCountry(countryname,countryCode,imageBase64,attribution,link,ca
 
 	if (attribution != null && link != null){
     
-    if (typeof inlineImage !== "undefined" && inlineImage != null && imageBase64 == null)
+    if (typeof inlineImage !== 'undefined' && inlineImage != null && inlineImage == 'true' && imageBase64 == null)
       return;
 
     var countryImage = {};

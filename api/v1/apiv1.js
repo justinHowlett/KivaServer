@@ -32,7 +32,7 @@ var api = {
 	      var kivaFeeds = require('./kivaFeeds.js');
 	      var queryString = url.parse(request.url, true).query;
 
-	      if (queryString.partnerid != null && typeof queryString.partnerid !== "undefined"){
+	      if (queryString.partnerid != null && typeof queryString.partnerid !== 'undefined'){
 	        //partner by id
 	        var kivaPartnerIdRequest = Object.create(kivaFeeds.partnerIdRequest);
 	        kivaPartnerIdRequest.makeRequest(request,serverResponse,cache,queryString.partnerid,null);
