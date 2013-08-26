@@ -6,6 +6,9 @@ KivaServer
 
 <h3>This API serves to proxy, cache and optimize responses from Kiva.org and the World Bank API for use within the Kiva Easy Lend iPhone app.</h3>
 
+<h3>Base Url</h3>
+`justindhowlett-kivaserver.jit.su`
+
 <h3>API Methods:</h3>
 
 GET Country Statistics:
@@ -15,6 +18,9 @@ GET Country Statistics:
 
 GET Kiva's Newest Loans:
 `<Base URL>/kiva/newest/`
+
+GET Kiva's Status:
+`<Base URL>/kiva/stats/`
 
 GET Kiva.org all partners 
 `<Base URL>/kiva/partners/`
@@ -28,16 +34,14 @@ GET Kiva.org partner by id
 
 <h3>Cron jobs</h3>
 Naive script-live cron jobs within taskScheduler.js
-  -Kiva's newest loans are requested and cached, scheduled every night at midnight EST
+  -Kiva stats, newest loans and partner requests are requested and cached, scheduled every night at midnight EST
   -All country requests are made and cached for the length of the script 
   
 <h3>Database setup</h3>
-DBConfig.js runs S3Feeds.js (will expand to handle images)
-   -S3Feeds.js runs to validate the file structure on Amazon S3 (where the initial database ingest files are stored)
-   -S3Feeds.js then purges the DB and ingests the files into a database to remove the need for an additional network request
+Although some references to a database exist they are currently disabled. This functionality will roll out as required.
 
 <h3>API</h3>
-The API is run within main.js where it captures the endpoint and passes the options (if applicable) as well as reference to the global in-memory cache and the server response to the appropriate module.
+The API version is captured within main.js where it then forwards the request and response to the appropriate version. The version of the api then sends the endpoint and passes the options (if applicable) as well as reference to the global in-memory cache and the server response to the appropriate module.
 It is the reponsibility of the chosen module to cache and end the server response.
   -Country development indicators are provided by the World Bank API within countryStats.js
   -Kiva.org caching and proxying is provided by the Kiva.org API within kivaFeeds.js
