@@ -16,8 +16,10 @@ var api = {
 	      var queryString = url.parse(request.url, true).query;
 	      var countryRequest = Object.create(country.CountryRequest);
 
+	      var countryCode = queryString.countrycode.toUpperCase();
+
 	      console.log('queryString.base64 is '+queryString.base64);
-	      countryRequest.makeRequest(request,serverResponse,queryString.countrycode,queryString.base64,cache,null);
+	      countryRequest.makeRequest(request,serverResponse,countryCode,queryString.base64,cache,null);
 
 	    }else if (endPoint == '/v1/kiva/newest/'){
 	      

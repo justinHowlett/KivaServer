@@ -45,7 +45,10 @@ var CountryRequest = {
             var jsonResponse = JSON.stringify(responseObject);
             cache.put(tempRequestUrl, jsonResponse); //store forever
 
-            callback();
+            if (callback){
+              callback();
+            }
+            
 
             if (serverResponse != null){
               serverResponse.end(jsonResponse);
