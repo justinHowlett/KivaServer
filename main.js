@@ -3,17 +3,12 @@ var cache = require('memory-cache');
 var url   = require('url');
 var tasks = require('./taskScheduler.js');
 
-var im    = require('imagemagick');
 var path  = require('path');
 
 // API Versions
 var apiV1 = require('./api/v1/apiv1.js')
 
-var start = new Date();
-im.convert([path.resolve(__dirname, 'kiva.jpg'), '-blur', '0x8','-quality','75%', path.resolve(__dirname, 'kiva-blur.jpg')],null);
-var end = new Date();
-var delta = (end-start);
-console.log('convert time is '+delta);
+
 
 tasks.scheduleTasks(cache);
 

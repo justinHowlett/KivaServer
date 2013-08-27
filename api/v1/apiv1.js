@@ -42,6 +42,11 @@ var api = {
 	        kivaPartnersRequest.makeRequest(request,serverResponse,cache,null);
 	      }
 	  
+	    }else if (endPoint == '/v1/image/'){
+
+	      var imageProcess = require('./image.js');
+
+
 	    }else if (endPoint == '/v1/kiva/stats/'){
 	      var kivaFeeds = require('./kivaFeeds.js');
 	      var kivaStatsRequest = Object.create(kivaFeeds.statsRequest);
