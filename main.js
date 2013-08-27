@@ -31,7 +31,7 @@ http.createServer(function (request, serverResponse) {
       serverResponse.end();
     }
   
-}).listen(8080);
+}).listen(process.env.PORT || 8080)
 
 var kivaString = 'MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM' + '\n' 
 + 'MM MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM' + '\n'
