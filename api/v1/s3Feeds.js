@@ -95,7 +95,7 @@ function makeS3Request(requestUrl,binaryresponse,callback){
 
 function formattedString(string)
 {
-	var capitalisedString = string.charAt(0).toUpperCase() + string.slice(1);
+	  var capitalisedString = string.charAt(0).toUpperCase() + string.slice(1);
     return capitalisedString.replace(/ /g,"_"); //space to underscore
 }
 

@@ -1,27 +1,17 @@
 var http  = require('http');
-var cache = require('memory-cache');
 var url   = require('url');
+var cache = require('memory-cache');
 var tasks = require('./taskScheduler.js');
 
-var path  = require('path');
 
 // API Versions
 var apiV1 = require('./api/v1/apiv1.js')
-
-
 
 tasks.scheduleTasks(cache);
 
 http.createServer(function (request, serverResponse) {
 
     serverResponse.writeHead(200, {'Content-Type': 'application/json'});
-
-    var cachedItem = cache.get(request.url);
-    if (cachedItem){
-      console.log('returning cached item for url '+request.url);
-    	serverResponse.end(cachedItem);
-    	return;
-    }
 
     console.log('missed cached item for url '+request.url);
 
