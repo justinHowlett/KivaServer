@@ -1,6 +1,5 @@
 [![Build Status](https://travis-ci.org/justinHowlett/KivaServer.png)](https://travis-ci.org/justinHowlett/KivaServer)
 
-
 KivaServer
 ==========
 
