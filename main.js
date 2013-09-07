@@ -3,11 +3,14 @@ var url   = require('url');
 var cache = require('memory-cache');
 var tasks = require('./taskScheduler.js');
 
-
 // API Versions
 var apiV1 = require('./api/v1/apiv1.js')
+var dbControl = require('./dbcontrol.js')
 
-tasks.scheduleTasks(cache);
+//start the database, on completion start the server tasks
+dbControl.configureDatabase(function(){
+  tasks.scheduleTasks(cache);
+});
 
 http.createServer(function (request, serverResponse) {
 

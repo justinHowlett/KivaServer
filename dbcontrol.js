@@ -1,5 +1,4 @@
-var common = require('../../common.js');
-var s3Feeds = require('./s3Feeds.js');
+var common = require('./common.js');
 var MongoClient = require('mongodb').MongoClient, format = require('util').format;  
 var liveDatabase;
 var setupCallback
@@ -7,7 +6,7 @@ var setupCallback
 function configureDatabase(callback){
 
   startDatabase(function(){
-
+      callback();
   });
 }
 

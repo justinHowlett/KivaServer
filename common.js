@@ -42,7 +42,7 @@ var kivaSupportedCountriesDict ={
      SV:["el salvador"],
      TG:["togo"],
      TJ:["tajikistan"],
-     TL:["timor-liste"],
+     TL:["timor-leste"],
      TZ:["tanzania"],
      UA:["ukraine"],
      UG:["uganda"],

@@ -38,15 +38,14 @@ var CountryRequest = {
           var countryName = common.kivaSupportedCountries[countryCode];
 
           //get background image and associated info from S3 in form of an Object 
-          s3Feeds.makeRequestsForCountry(countryName,countryCode,inlineImage,function(countryImage){
-           
-            var responseObject = {countryImage: countryImage, indicators: concatResponse};
+          s3Feeds.makeRequestsForCountry(countryName,countryCode,inlineImage,function(country){
+            var responseObject = {countryImage: country.countryImage, indicators: concatResponse, countryDescription: country.countryDescription, name: country.countryName};
 
             var jsonResponse = JSON.stringify(responseObject);
             cache.put(tempRequestUrl, jsonResponse); //store forever
 
             if (callback){
-              callback();
+               callback();
             }
             
 
@@ -61,6 +60,10 @@ var CountryRequest = {
       });
     }
   }
+
+  
+
+
 };
 
 exports.CountryRequest = CountryRequest;

@@ -1,4 +1,5 @@
 var common = require('./common.js');
+var dbControl = require('./dbcontrol.js')
 
 function scheduleTasks(cache){
 
@@ -26,10 +27,12 @@ function scheduleTasks(cache){
 
 function fetchAllCountryInfo(cache,callback){
 
+
+
 	makeCountryRequest(0);
 
 	function makeCountryRequest(i){
-
+ 
 		var commonKeys = Object.keys(common.kivaSupportedCountries); 
 
 		if (i > commonKeys.length-1){
@@ -42,10 +45,46 @@ function fetchAllCountryInfo(cache,callback){
 		var countryRequest = Object.create(country.CountryRequest);
 		var request = require('request');
 		request.url = '/v1/countries/?countrycode='+ countryCode;
-		
+
+		console.log('countryModule 1 is '+country);
+
 		countryRequest.makeRequest(request,null,countryCode,null,cache,function(){
-			
 			makeCountryRequest(i+1);
+		});
+
+	}
+
+	requestAndStoreCountryDetails(0);
+
+	var countryModule = require('./api/v1/countryStats.js');
+
+	function requestAndStoreCountryDetails(i){
+
+		console.log('running requestAndStoreCountryDetails');
+
+		var commonKeys = Object.keys(common.kivaSupportedCountries); 
+
+		if (i > commonKeys.length-1){
+			console.log('complete requestAndStoreCountryDetails');
+			callback();
+			return;
+		}
+
+		var countryCode = commonKeys[i];
+
+		console.log('countryModule is '+countryModule);
+
+
+		var countryRequest = Object.create(countryModule.CountryRequest);
+		
+		countryRequest.createCountry(countryCode,function(country){
+			console.log('calling home');
+			var collection = db.collection('country_details');
+    		collection.insert({countryCode : country}, function(err, docs) {
+    			console.log('insert success');
+    			requestAndStoreCountryDetails(i+1);
+    		});
+			
 		});
 
 	}

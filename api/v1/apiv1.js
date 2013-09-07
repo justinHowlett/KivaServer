@@ -1,4 +1,3 @@
-var dbControl 	= require('./dbcontrol.js');
 var url   		= require('url');
 
 var api = {
@@ -50,13 +49,9 @@ var api = {
 			    kivaStatsRequest.makeRequest(request,serverResponse,cache,null);
 			break;
 
-			case '/v1/image/':
+			case '/v1/image/blur/':
 				var imageHandler = require('./image.js');
 			    var queryString = url.parse(request.url, true).query;
-
-			    var provideBlur 			= (typeof queryString.blur === 'undefined')? false : queryString.blur;
-			    var provideFaceLocations 	= (typeof queryString.facelocations === 'undefined')? false : queryString.facelocations;
-			    var provideFaceImages 		= (typeof queryString.faceimages === 'undefined')? false : queryString.faceimages;
 
 			    var imageProcess = Object.create(imageHandler.imageProcess);
 
@@ -70,13 +65,13 @@ var api = {
 				    })
 
    					request.on('end', function() {
-       					imageProcess.processRequest(serverResponse,null,imagedata,provideBlur,provideFaceLocations.provideFaceImages,cache)
+       					imageProcess.processRequest(serverResponse,null,imagedata,cache)
     				});
 
 			    }else if (request.method === 'GET'){
 
 			      	var imageUrl = queryString.imageurl;
-			        imageProcess.processRequest(serverResponse,imageurl,null,provideBlur,provideFaceLocations.provideFaceImages,cache)
+			      	imageProcess.processRequest(serverResponse,imageUrl,null,cache)
 			    }
 			break;
 		}
