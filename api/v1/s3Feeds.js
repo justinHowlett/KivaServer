@@ -1,6 +1,4 @@
 var common = require('../../common.js');
-var dbControl = require('./dbcontrol.js');
-
 
 function makeRequestsForCountry(countryName,countryCode,requestInlineImage,callback){
 

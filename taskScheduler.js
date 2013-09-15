@@ -1,14 +1,22 @@
 var common = require('./common.js');
 var dbControl = require('./dbcontrol.js')
 
-function scheduleTasks(cache){
+function scheduleTasks(cache,database,callback){
 
-	//fetch cachable data on server start synchronously
-	fetchAllCountryInfo(cache,function(){
+	//fetch cachable data on server start synchronously to prevent flooding with network requests. 
+	console.log('fetching country info');
+	fetchAllCountryInfo(cache,database,function(){
+		//Country info is the only required dataset before the api starts. Thes rest just fill the cache.
+		if (callback != null){
+			callback();
+		}
+		console.log('fetching newest kiva loans');
 		fetchNewestLoans(cache,function(){
+			console.log('fetching kiva partner list');
 			fetchAllPartners(cache,function(){
+				console.log('fetching kiva stats');
 				fetchKivaStats(cache,function(){
-					console.log('server setup caching complete');
+				
 				});
 			});
 		});
@@ -25,66 +33,31 @@ function scheduleTasks(cache){
 
 }
 
-function fetchAllCountryInfo(cache,callback){
-
-
-
-	makeCountryRequest(0);
-
-	function makeCountryRequest(i){
- 
-		var commonKeys = Object.keys(common.kivaSupportedCountries); 
-
-		if (i > commonKeys.length-1){
-			callback();
-			return;
-		}
-
-		var countryCode = commonKeys[i];
-		var country = require('./api/v1/countryStats.js');
-		var countryRequest = Object.create(country.CountryRequest);
-		var request = require('request');
-		request.url = '/v1/countries/?countrycode='+ countryCode;
-
-		console.log('countryModule 1 is '+country);
-
-		countryRequest.makeRequest(request,null,countryCode,null,cache,function(){
-			makeCountryRequest(i+1);
-		});
-
-	}
+function fetchAllCountryInfo(cache,database,callback){
 
 	requestAndStoreCountryDetails(0);
 
-	var countryModule = require('./api/v1/countryStats.js');
-
 	function requestAndStoreCountryDetails(i){
-
-		console.log('running requestAndStoreCountryDetails');
 
 		var commonKeys = Object.keys(common.kivaSupportedCountries); 
 
 		if (i > commonKeys.length-1){
-			console.log('complete requestAndStoreCountryDetails');
 			callback();
 			return;
 		}
 
 		var countryCode = commonKeys[i];
+		var countryModule = require('./api/v1/countryStats.js');
 
-		console.log('countryModule is '+countryModule);
+		var countryConstruct = Object.create(countryModule.CountryConstruct);
 
+		countryConstruct.createCountry(countryCode,function(country){
+	
+			var collection = database.collection(common.countryDetailsCollection);
 
-		var countryRequest = Object.create(countryModule.CountryRequest);
-		
-		countryRequest.createCountry(countryCode,function(country){
-			console.log('calling home');
-			var collection = db.collection('country_details');
-    		collection.insert({countryCode : country}, function(err, docs) {
-    			console.log('insert success');
-    			requestAndStoreCountryDetails(i+1);
-    		});
-			
+	 		collection.insert(country,function(err, doc) {     
+	        	requestAndStoreCountryDetails(i+1);
+	        });
 		});
 
 	}
@@ -124,7 +97,7 @@ function fetchAllPartners(cache,callback){
 	//synchronously request the partners, prevent flooding with requests
 	function partnerRequest(i){
 		
-		if (i>=300){
+		if (i>=common.numberOfKivaPartners){
 			callback();
 			return;
 		}

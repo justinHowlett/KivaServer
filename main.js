@@ -1,40 +1,19 @@
-var http  = require('http');
-var url   = require('url');
-var cache = require('memory-cache');
-var tasks = require('./taskScheduler.js');
-
-// API Versions
-var apiV1 = require('./api/v1/apiv1.js')
+var cache     = require('memory-cache');
+var tasks     = require('./taskScheduler.js');
+var common    = require('./common.js');
+var router    = require('./apirouter.js');
 var dbControl = require('./dbcontrol.js')
 
-//start the database, on completion start the server tasks
-dbControl.configureDatabase(function(){
-  tasks.scheduleTasks(cache);
+//start the database, on completion start the startup tasks
+var dbSetup = Object.create(dbControl.DatabaseSetup);
+
+dbSetup.configureDatabase(function(database){
+  //on completion of the startup tasks, start the API
+  tasks.scheduleTasks(cache,database,function(){
+    var apiRouter = Object.create(router.Api);
+    apiRouter.beginListening(cache,database);
+  });
 });
-
-http.createServer(function (request, serverResponse) {
-
-    serverResponse.writeHead(200, {'Content-Type': 'application/json'});
-
-    console.log('missed cached item for url '+request.url);
-
-    var endPoint = url.parse(request.url, true).pathname;
-
-    if (endPoint.indexOf("/v1") == 0){
-      //version 1 api request
-      var v1Api = Object.create(apiV1.api);
-      v1Api.handleApiRequest(request,serverResponse,cache,endPoint);
-
-    }else if (endPoint == '/loaderio-cd1a021f6ca4d51049205bf21227fe8d/'){
-      //auth token for load testing
-      serverResponse.end('loaderio-cd1a021f6ca4d51049205bf21227fe8d');
-
-    }else{
-      serverResponse.writeHead(404, {'Content-Type': 'application/json'});
-      serverResponse.end();
-    }
-  
-}).listen(process.env.PORT || 8080)
 
 var kivaString = 'MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM' + '\n' 
 + 'MM MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM' + '\n'
@@ -65,4 +44,9 @@ var kivaString = 'MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM
 + 'MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM' + '\n'
 + 'MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM';
 
-console.log('Server Start complete' + '\n' + '\n' + '\n' + kivaString);
+console.log(kivaString);
+
+//log uncaught exception for debug
+process.on('uncaughtException', function (err) {
+  console.log(err);
+})

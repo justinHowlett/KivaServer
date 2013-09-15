@@ -1,5 +1,8 @@
 //common static objects to be used throughout the application and API versions.
 
+var countryDetailsCollection  = 'country_details';
+var numberOfKivaPartners      = 300;
+
 var kivaSupportedCountriesDict ={ 
      AL:["albania"], 
      AM:["armenia"],
@@ -54,4 +57,6 @@ var kivaSupportedCountriesDict ={
      ZW:["zimbabwe"]
 };
 
+exports.countryDetailsCollection = countryDetailsCollection;
 exports.kivaSupportedCountries = kivaSupportedCountriesDict;
+exports.numberOfKivaPartners = numberOfKivaPartners;

@@ -1,5 +1,6 @@
 var url   		= require('url');
 
+
 var api = {
 
 	/* prepare the database from S3 files on completion populate the cache and scheduled the cron jobs  */
@@ -7,7 +8,7 @@ var api = {
 	//   console.log('db ready');
 	// })
 
-	handleApiRequest: function (request,serverResponse,cache,endPoint) {
+	handleApiRequest: function (request,serverResponse,cache,database,endPoint) {
 
 		switch (endPoint){
 
@@ -19,7 +20,7 @@ var api = {
 		      	var countryCode = queryString.countrycode.toUpperCase();
 
 		      	console.log('queryString.base64 is '+queryString.base64);
-		      	countryRequest.makeRequest(request,serverResponse,countryCode,queryString.base64,cache,null);
+		      	countryRequest.makeRequest(request,serverResponse,countryCode,queryString.base64,cache,database,null);
 			break;
 
 			case '/v1/kiva/newest/':
