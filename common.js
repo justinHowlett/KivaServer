@@ -57,6 +57,6 @@ var kivaSupportedCountriesDict ={
      ZW:["zimbabwe"]
 };
 
-exports.countryDetailsCollection = countryDetailsCollection;
-exports.kivaSupportedCountries = kivaSupportedCountriesDict;
-exports.numberOfKivaPartners = numberOfKivaPartners;
+exports.countryDetailsCollection   = countryDetailsCollection;
+exports.kivaSupportedCountries     = kivaSupportedCountriesDict;
+exports.numberOfKivaPartners       = numberOfKivaPartners;

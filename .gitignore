@@ -10,5 +10,8 @@ lib-cov
 pids
 logs
 results
+country descriptions
+country shapes
+single use scripts
 
 npm-debug.log
