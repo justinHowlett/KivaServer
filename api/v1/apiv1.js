@@ -49,14 +49,14 @@ var api = {
 			    var kivaStatsRequest = Object.create(kivaFeeds.statsRequest);
 			    kivaStatsRequest.makeRequest(request,serverResponse,cache,null);
 			break;
+		}
+	}
 
-			case '/v1/image/blur/':
-				var imageHandler = require('./image.js');
-			    var queryString = url.parse(request.url, true).query;
+}
 
-			    var imageProcess = Object.create(imageHandler.imageProcess);
-
-			    if (request.method === 'POST'){
+/*
+//TODO: quit after ridiculous file size assuming attack 
+if (request.method === 'POST'){
 
 			      	var imagedata = ''
 				    request.setEncoding('binary')
@@ -69,15 +69,7 @@ var api = {
        					imageProcess.processRequest(serverResponse,null,imagedata,cache)
     				});
 
-			    }else if (request.method === 'GET'){
-
-			      	var imageUrl = queryString.imageurl;
-			      	imageProcess.processRequest(serverResponse,imageUrl,null,cache)
 			    }
-			break;
-		}
-	}
-
-}
+*/
 
 exports.api = api;
