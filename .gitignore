@@ -13,5 +13,6 @@ results
 country descriptions
 country shapes
 single use scripts
+node_modules/
 
 npm-debug.log
