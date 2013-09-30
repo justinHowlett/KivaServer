@@ -1,10 +1,5 @@
-language: node_js
-node_js: 
-- 0.1
-
 deploy: 
   user: justindhowlett
   provider: nodejitsu
-  api_key: c574e6bb-8b65-40f0-9ebe-56b8aa5242c2
-  on: 
-    repo: justinHowlett/KivaServer
+  api_key: 
+    secure: PFb08o3TS0+kWMe8sOsKui0G/XdLrIU3y7Op8u0RW+1RQgMw8MOWM8stjnlFVLRyu4nogde1wO8JKvIfCDiZeyneD8EwTeUc84UdALCACn+bk6KASx7BjTP2kN0O+hk6ACVlYyeJwtDqOFPj4xozvmMyUqJMx9rAuS+dWqvaNJ4=
