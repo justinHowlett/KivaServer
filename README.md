@@ -5,7 +5,7 @@ KivaServer
 
 <h3>This API serves to proxy, cache and optimize responses from Kiva.org and the World Bank API for use within the Kiva Easy Lend iPhone app.</h3>
 
-<h3>Base Url</h3>
+<h3>Base URL</h3>
 `justindhowlett-kivaserver.jit.su`
 
 <h3>API Methods:</h3>
